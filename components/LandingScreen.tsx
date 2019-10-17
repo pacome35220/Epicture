@@ -8,13 +8,11 @@ class LandingScreen extends React.Component {
 
     state = {
         user: {},
-        done: false,
+        logged: false,
     }
 
     async componentDidMount() {
         await this.setState({ user: await User.get() });
-
-        setTimeout(() => this.setState({ done: true }), 1500);
     }
 
     getAuthUrl(clientId) {
@@ -22,37 +20,45 @@ class LandingScreen extends React.Component {
             `&client_id=${clientId}`
     }
 
-    async login() {
-        console.log('login button pressed');
+    // async login() {
+    //     console.log('login button pressed');
+    //     let user = this.state.user;
+
+    //     if (!user) {
+    //         user = this.getAuthUrl(require('../credentials.json').clientId),
+    //             console.log(user);
+    //         console.log('après l oauth2 on a :');
+    //         console.log(user);
+    //     } else {
+    //         console.log('already logged as ' + user);
+    //     }
+
+    // }
+
+    parseResponseURL(newNavState: WebViewNavigation) {
         let user = this.state.user;
 
         if (!user) {
-            user = this.getAuthUrl(require('../credentials.json').clientId),
-                console.log(user);
-            User.set(user);
-            console.log('après l oauth2 on a :');
-            console.log(user);
-        } else {
-            console.log('already logged as ' + user);
+            console.log(newNavState.url)
+            User.set(newNavState.url);
         }
-
+        this.state.logged = true;
         this.props.onLogged(user);
-    }
-
-    parseResponseURL(newNavState: WebViewNavigation) {
-        console.log(newNavState)
     }
 
     run_webview: boolean = false;
 
     render() {
-        return (
+        if (!this.state.logged)
+            return (
                 <WebView
                     source={{ uri: this.getAuthUrl(require('../credentials.json').clientId) }}
                     onNavigationStateChange={this.parseResponseURL}
-                    style={{marginTop: 20}}
+                    style={{ marginTop: 20 }}
                 ></WebView>
-        )
+            );
+        else
+            return null;
     }
 }
 
