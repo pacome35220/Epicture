@@ -2,13 +2,16 @@ import React from 'react';
 import { Button, View, StyleSheet, Text } from 'react-native';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 
-import User from '../common/User';
+import { User } from '../common/User';
 
 class LandingScreen extends React.Component {
 
-    state = {
-        user: {},
-        logged: false,
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: {},
+            logged: false
+        };
     }
 
     async componentDidMount() {
@@ -20,57 +23,40 @@ class LandingScreen extends React.Component {
             `&client_id=${clientId}`
     }
 
-    // async login() {
-    //     console.log('login button pressed');
-    //     let user = this.state.user;
-
-    //     if (!user) {
-    //         user = this.getAuthUrl(require('../credentials.json').clientId),
-    //             console.log(user);
-    //         console.log('après l oauth2 on a :');
-    //         console.log(user);
-    //     } else {
-    //         console.log('already logged as ' + user);
-    //     }
-
-    // }
-
-    parseResponseURL(newNavState: WebViewNavigation) {
+    parseResponseURL(url: string) {
         let user = this.state.user;
 
         if (!user) {
-            console.log(newNavState.url)
-            User.set(newNavState.url);
+            if (url.split('&').length != 6)
+                return null;
+            const array = url.match(/(\?|\&|#)([^=]+)\=([^&]+)/g);
+            let res = {};
+
+            array.forEach((elem: string) => {
+                const tmp = elem.match(/(\?|\&|#)([^=]+)\=([^&]+)/);
+
+                res[tmp[2]] = tmp[3];
+            });
+            User.set(res);
         }
-        this.state.logged = true;
+        this.setState({
+            logged: true
+        });
         this.props.onLogged(user);
     }
-
-    run_webview: boolean = false;
 
     render() {
         if (!this.state.logged)
             return (
                 <WebView
                     source={{ uri: this.getAuthUrl(require('../credentials.json').clientId) }}
-                    onNavigationStateChange={this.parseResponseURL}
+                    onNavigationStateChange={(newNavState: WebViewNavigation) =>
+                        this.parseResponseURL(newNavState.url)
+                    }
                     style={{ marginTop: 20 }}
                 ></WebView>
             );
-        else
-            return null;
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    button: {
-        margin: "0 200 0 200"
-    }
-});
 
 export default LandingScreen
