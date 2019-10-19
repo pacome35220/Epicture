@@ -1,14 +1,23 @@
 import { AsyncStorage } from 'react-native';
 
-class User {
+export interface OAuth2Response {
+    access_token?: string
+    expires_in?: string
+    token_type?: string
+    refresh_token?: string
+    account_username?: string
+    account_id?: string
+}
+
+export class User {
     static lastUpdate: number = 0;
-    static cache = {};
+    static cache: OAuth2Response;
     static subscribers = [];
     static triggerChange = () => User.subscribers.forEach(f => f(User.cache));
 
-    token = '';
+    token: string = '';
 
-    static async get() {
+    static async get(): Promise<OAuth2Response> {
         const now: number = Date.now();
 
         if (now - User.lastUpdate > 60 * 60 * 1000) { // 1 hour
@@ -19,10 +28,10 @@ class User {
         return User.cache;
     }
 
-    static async set(user) {
+    static async set(user: OAuth2Response) {
         User.cache = user;
         await AsyncStorage.setItem('user', JSON.stringify(User.cache));
-        // User.triggerChange();
+        User.triggerChange();
     }
 
     static async logout() {
@@ -35,5 +44,3 @@ class User {
         User.subscribers.push(callback);
     }
 }
-
-export default User

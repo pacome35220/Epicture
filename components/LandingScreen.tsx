@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, View, StyleSheet, Text } from 'react-native';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 
-import { User } from '../common/User';
+import { User, OAuth2Response } from '../common/User';
 
 class LandingScreen extends React.Component {
 
@@ -18,19 +17,19 @@ class LandingScreen extends React.Component {
         await this.setState({ user: await User.get() });
     }
 
-    getAuthUrl(clientId) {
+    getAuthUrl(clientId: string) {
         return `https://api.imgur.com/oauth2/authorize?response_type=token` +
             `&client_id=${clientId}`
     }
 
     parseResponseURL(url: string) {
-        let user = this.state.user;
+        let user = this.state.user as OAuth2Response;
 
-        if (!user) {
+        if (!user || !Object.entries(user).length) {
             if (url.split('&').length != 6)
                 return null;
             const array = url.match(/(\?|\&|#)([^=]+)\=([^&]+)/g);
-            let res = {};
+            let res: OAuth2Response = {};
 
             array.forEach((elem: string) => {
                 const tmp = elem.match(/(\?|\&|#)([^=]+)\=([^&]+)/);
@@ -56,6 +55,8 @@ class LandingScreen extends React.Component {
                     style={{ marginTop: 20 }}
                 ></WebView>
             );
+        else
+            return null;
     }
 }
 
