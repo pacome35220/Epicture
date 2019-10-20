@@ -1,5 +1,15 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
+import { createAppContainer } from 'react-navigation'
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
+
+import Gallery from '../components/gallery'
+import UserProfile from '../components/UserProfile'
+
+const NavbarTab = createMaterialBottomTabNavigator({
+    GalleryTab: { screen: Gallery },
+    UserProfileTab: { screen: UserProfile } ,
+});
 
 class Navbar extends React.Component {
     render() {
@@ -16,7 +26,7 @@ class Navbar extends React.Component {
 
 const styles = StyleSheet.create({
     navbar: {
-        flex: 1,
+        height: 100,
         flexDirection: 'row',
         backgroundColor: 'red'
     },
@@ -25,4 +35,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Navbar
+export default createAppContainer(NavbarTab)

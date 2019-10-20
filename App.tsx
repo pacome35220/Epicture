@@ -30,7 +30,7 @@ export default class App extends React.Component {
     if (this.state.user && Object.entries(this.state.user).length == 6)
       return (
         <View style={styles.container}>
-          <Navbar />
+          <Navbar/>
         </View>
       );
     else
