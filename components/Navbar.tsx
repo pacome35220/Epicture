@@ -14,7 +14,7 @@ const NavbarTab = createMaterialBottomTabNavigator ({
         navigationOptions: {
             labeled: false,
             tabBarIcon: () => {
-                return <Icon name='home' size={30} color='#000000'></Icon>
+                return <Icon name='home' size={30} color='#FFFFFF'></Icon>
             }
         }
     },
@@ -23,7 +23,7 @@ const NavbarTab = createMaterialBottomTabNavigator ({
         navigationOptions: {
             labeled: false,
             tabBarIcon: () => {
-                return <Icon name='search' size={30} color='#000000'></Icon>
+                return <Icon name='search' size={30} color='#FFFFFF'></Icon>
             }
         }
     },
@@ -32,7 +32,7 @@ const NavbarTab = createMaterialBottomTabNavigator ({
         navigationOptions: {
             labeled: false,
             tabBarIcon: () => {
-                return <Icon name='user' size={30} color='#000000'></Icon>
+                return <Icon name='user' size={30} color='#FFFFFF'></Icon>
             }
         }
     }
