@@ -4,7 +4,7 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Gallery from './gallery'
+import Gallery from './Gallery'
 import UserProfile from './UserProfile'
 import Search from './Search'
 

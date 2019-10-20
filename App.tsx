@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import LandingScreen from './components/LandingScreen'
-import Navbar from './components/navbar';
+import Navbar from './components/Navbar';
 
 import { User, OAuth2Response } from './common/User';
 
