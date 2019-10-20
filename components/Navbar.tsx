@@ -38,4 +38,6 @@ const NavbarTab = createMaterialBottomTabNavigator ({
     }
 });
 
-export default createAppContainer(NavbarTab)
+const Navbar = createAppContainer(NavbarTab)
+
+export default Navbar

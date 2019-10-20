@@ -3,6 +3,8 @@ import { Text, View, Image } from 'react-native'
 
 import { ImgurApi } from '../common/ImgurApi'
 
+import UserNavbar from './UserNavbar'
+
 const imgurApi = ImgurApi.getInstance();
 
 class UserProfile extends React.Component {
@@ -18,8 +20,8 @@ class UserProfile extends React.Component {
                         User description ?
                     </Text>
                 </View>
-                <View style={{flex: 4, backgroundColor: '#ff0000'}}>
-
+                <View style={{flex: 4}}>
+                    <UserNavbar/>
                 </View>
             </View>
         )
