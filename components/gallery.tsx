@@ -1,13 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
 class Gallery extends React.Component {
     render() {
         return (
-            <View style={{ marginTop: 30, flex: 5 }}>
-                <TextInput style={styles.textinput} placeholder='Search an image'/>
-                <Button title='Rechercher' onPress= {() => {}}/>
-            </View>
+            <Text>
+                This is gallery tab
+            </Text>
         )
     }
 }
