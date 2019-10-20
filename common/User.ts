@@ -52,3 +52,5 @@ export class User {
         User.subscribers.push(callback);
     }
 }
+
+export default User

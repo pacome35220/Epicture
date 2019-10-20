@@ -4,7 +4,7 @@
 
 import User from './User';
 
-class AuthManager {
+export class AuthManager {
     private static instance: AuthManager;
 
     private constructor() {}
@@ -23,8 +23,6 @@ class AuthManager {
             AuthManager.instance = new AuthManager();
         }
 
-        return this.instance;
+        return AuthManager.instance;
     }
 }
-
-export default AuthManager
