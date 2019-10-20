@@ -1,12 +1,14 @@
 import React from 'react'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 
 class UserProfile extends React.Component {
     render() {
         return(
-            <Text style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
-                This is User-Profile tab
-            </Text>
+            <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
+                <Text>
+                    This is User-Profile tab
+                </Text>
+            </View>
         )
     };
 }

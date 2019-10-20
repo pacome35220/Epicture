@@ -1,12 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 class Gallery extends React.Component {
     render() {
         return (
-            <Text>
-                This is gallery tab
-            </Text>
+            <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
+                <Text>
+                    This is gallery tab
+                </Text>
+            </View>
         )
     }
 }
