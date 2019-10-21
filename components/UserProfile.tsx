@@ -33,9 +33,7 @@ class UserProfile extends React.Component {
                             style={{ width: 100, height: 100, borderRadius: 100 }}
                             source={{ uri: `https://imgur.com/user/${this.state.user.account_username}/avatar` }}
                         />
-                        <Text style={{ marginTop: 20 }}>
-                            User description ?
-                    </Text>
+                        <Text style={{ marginTop: 20 }}>{this.state.user.account_username}</Text>
                     </ImageBackground>
                 </View>
                 <View style={{ flex: 4 }}>
