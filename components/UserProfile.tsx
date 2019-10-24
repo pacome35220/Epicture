@@ -1,12 +1,8 @@
 import React from 'react'
 import { Text, View, Image, ImageBackground, Dimensions } from 'react-native'
 
-import { ImgurApi } from '../common/ImgurApi'
-
-import { UserNavbar } from './Navbar'
-import { User, OAuth2Response } from '../common/User'
-
-const imgurApi = ImgurApi.getInstance();
+import UserNavbar from './UserNavbar'
+import User from '../common/User';
 
 class UserProfile extends React.Component {
 
