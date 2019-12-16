@@ -3,12 +3,16 @@ import { WebView, WebViewNavigation } from 'react-native-webview';
 
 import { User, OAuth2Response } from '../common/User';
 
+interface Props {
+    onLogged(user: OAuth2Response): void;
+}
+
 interface State {
-    user: object;
+    user: OAuth2Response;
     logged: boolean;
 }
 
-class LandingScreen extends React.Component<any, State> {
+class OAuth2Imgur extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,7 +22,7 @@ class LandingScreen extends React.Component<any, State> {
     }
 
     async componentDidMount() {
-        await this.setState({ user: await User.get() });
+        this.setState({ user: await User.get() });
     }
 
     getAuthUrl(clientId: string) {
@@ -29,7 +33,7 @@ class LandingScreen extends React.Component<any, State> {
     }
 
     parseResponseURL(url: string) {
-        let user = this.state.user as OAuth2Response;
+        let user = this.state.user;
 
         if (!user || !Object.entries(user).length) {
             if (url.split('&').length != 6) return null;
@@ -68,4 +72,4 @@ class LandingScreen extends React.Component<any, State> {
     }
 }
 
-export default LandingScreen;
+export default OAuth2Imgur;

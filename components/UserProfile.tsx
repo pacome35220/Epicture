@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, Image, ImageBackground, Dimensions } from 'react-native';
 
-import UserNavbar from './UserNavbar';
+import { UserNavbar } from './HomeScreen/HomeScreen';
 import User from '../common/User';
 
 class UserProfile extends React.Component {

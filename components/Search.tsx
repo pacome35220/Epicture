@@ -17,7 +17,7 @@ class Search extends React.Component {
     }
 
     private searchImage() {
-        console.log(this.searchText);
+        // console.log(this.searchText);
     }
 
     render() {

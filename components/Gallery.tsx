@@ -1,76 +1,86 @@
 import React from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    Dimensions,
-    FlatList
-} from 'react-native';
+import { Text, Image, View, FlatList, SafeAreaView } from 'react-native';
+import { Container } from 'native-base';
+
+import Video from 'react-native-video';
 
 import { ImgurApi } from '../common/ImgurApi';
-import { NullConsole } from '@jest/console';
-import { isTemplateElement } from '@babel/types';
+import { ApiResponseGallery } from '../common/ApiResponseInterface';
+import AppHeader from './AppHeader';
 
-const galleryUrl =
-    'https://api.imgur.com/3/gallery/hot/viral/day/1?showViral=true&mature=false&album_previews=false';
+interface State {
+    images: ApiResponseGallery[];
+}
 
-class Gallery extends React.Component {
+class Gallery extends React.Component<any, State> {
     constructor(props) {
         super(props);
         this.state = {
-            images: [],
-            image: '',
-            imageIsLoading: true
+            images: []
         };
     }
 
-    componentDidMount() {
-        this.fetchGalleryImages();
-    }
+    async componentDidMount() {
+        try {
+            const images = await ImgurApi.getInstance().getImageGallery();
 
-    private async fetchGalleryImages() {
-        ImgurApi.getInstance()
-            .getImageGallery()
-            .then(images => {
-                this.setState({ image: images });
-                this.setState({ imageIsLoading: false });
-            });
+            this.setState(prevState => ({
+                images: [...prevState.images, ...images]
+            }));
+        } catch (err) {
+            console.warn(err);
+        }
     }
 
     render() {
-        if (this.state.imageIsLoading == false) {
-            console.log(this.state.image);
-            return (
-                <FlatList
-                    data={this.props.images}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <Image
-                            style={{
-                                width: Dimensions.get('window').width,
-                                height: Dimensions.get('window').width
-                            }}
-                            source={{ uri: this.state.image }}
-                        />
-                    )}
-                />
-            );
-        } else {
+        if (!this.state.images.length) {
             return <Text>Loading</Text>;
         }
+        return (
+            <Container>
+                <AppHeader
+                    tabName='gallery'
+                    callback={this.props.navigation.toggleDrawer}
+                />
+                <SafeAreaView>
+                    <FlatList
+                        data={this.state.images}
+                        renderItem={({ item }) => {
+                            console.log('Gallery currently rendering: ', item);
+
+                            // return <Text> {item.link} </Text>;
+
+                            if (item.images[0].type === 'video/mp4') {
+                                return (
+                                    <Video
+                                        source={{
+                                            uri: item.images[0].link
+                                        }}
+                                    />
+                                );
+                            } else {
+                                console.log(item.images[0].link);
+                                // return <Text> {item.images[0].link} </Text>;
+                                return (
+                                    <View>
+                                        <Image
+                                            style={{
+                                                width: item.images[0].width,
+                                                height: item.images[0].height
+                                            }}
+                                            source={{
+                                                uri: item.images[0].link
+                                            }}
+                                        />
+                                    </View>
+                                );
+                            }
+                        }}
+                    />
+                </SafeAreaView>
+            </Container>
+        );
     }
 }
-
-const styles = StyleSheet.create({
-    textinput: {
-        marginLeft: 5,
-        marginRight: 5,
-        height: 50,
-        borderColor: '#000000',
-        borderWidth: 1,
-        paddingLeft: 5
-    }
-});
 
 export default Gallery;
