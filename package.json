@@ -33,6 +33,7 @@
         "husky": "^3.1.0",
         "lint-staged": "^9.5.0",
         "metro-react-native-babel-preset": "0.51.1",
+        "prettier": "^1.19.1",
         "react-test-renderer": "16.9.0"
     },
     "lint-staged": {

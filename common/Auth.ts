@@ -1,6 +1,6 @@
 /*
-** It's a freaking singleton pattern
-*/
+ ** It's a freaking singleton pattern
+ */
 
 import User from './User';
 

@@ -1,24 +1,24 @@
-import React from 'react'
-import { createAppContainer } from 'react-navigation'
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
+import React from 'react';
+import { createAppContainer } from 'react-navigation';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Gallery from './Gallery'
-import UserProfile from './UserProfile'
-import Search from './Search'
+import Gallery from './Gallery';
+import UserProfile from './UserProfile';
+import Search from './Search';
 
-import Posts from './profile/Posts'
-import Favorites from './profile/Favorites'
+import Posts from './profile/Posts';
+import Favorites from './profile/Favorites';
 
-const NavbarTab = createMaterialBottomTabNavigator ({
+const NavbarTab = createMaterialBottomTabNavigator({
     GalleryTab: {
         screen: Gallery,
         navigationOptions: {
             labeled: false,
             tabBarIcon: () => {
-                return <Icon name='home' size={30} color='#FFFFFF'></Icon>
+                return <Icon name='home' size={30} color='#FFFFFF' />;
             }
         }
     },
@@ -27,7 +27,7 @@ const NavbarTab = createMaterialBottomTabNavigator ({
         navigationOptions: {
             labeled: false,
             tabBarIcon: () => {
-                return <Icon name='search' size={30} color='#FFFFFF'></Icon>
+                return <Icon name='search' size={30} color='#FFFFFF' />;
             }
         }
     },
@@ -36,27 +36,27 @@ const NavbarTab = createMaterialBottomTabNavigator ({
         navigationOptions: {
             labeled: false,
             tabBarIcon: () => {
-                return <Icon name='user' size={30} color='#FFFFFF'></Icon>
+                return <Icon name='user' size={30} color='#FFFFFF' />;
             }
         }
     }
 });
 
-const UserNavbarTab = createMaterialTopTabNavigator ({
+const UserNavbarTab = createMaterialTopTabNavigator({
     PostsTab: {
         screen: Posts,
         navigationOptions: {
-            tabBarLabel: 'Posts',
+            tabBarLabel: 'Posts'
         }
     },
     FavoritesTab: {
         screen: Favorites,
         navigationOptions: {
-            tabBarLabel: 'Favorites',
+            tabBarLabel: 'Favorites'
         }
     }
 });
 
-export const UserNavbar = createAppContainer(UserNavbarTab)
+export const UserNavbar = createAppContainer(UserNavbarTab);
 
-export const Navbar = createAppContainer(NavbarTab)
+export const Navbar = createAppContainer(NavbarTab);

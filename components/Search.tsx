@@ -1,8 +1,7 @@
-import React from 'react'
-import { View, TextInput } from 'react-native'
+import React from 'react';
+import { View, TextInput } from 'react-native';
 
 class Search extends React.Component {
-    
     searchText: string = '';
 
     constructor(props) {
@@ -20,18 +19,18 @@ class Search extends React.Component {
     private searchImage() {
         console.log(this.searchText);
     }
-    
+
     render() {
         return (
             <View style={{ marginTop: 50 }}>
                 <TextInput
-                placeholder='Search an image'
-                onChangeText={(text) => this.onSearchInputChange(text)}
-                onSubmitEditing={() => this.searchImage()}
+                    placeholder='Search an image'
+                    onChangeText={text => this.onSearchInputChange(text)}
+                    onSubmitEditing={() => this.searchImage()}
                 />
             </View>
-        )
+        );
     }
 }
 
-export default Search
+export default Search;
