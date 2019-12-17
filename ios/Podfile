@@ -35,9 +35,7 @@ target 'DEV_epicture_2019' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
-  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
-  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
   target 'DEV_epicture_2019Tests' do
     inherit! :search_paths
