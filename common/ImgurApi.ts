@@ -1,14 +1,22 @@
 import axios from 'axios';
-import { ApiResponseGallery } from './ApiResponseInterface';
+import { GalleryApiModel, GalleryFilter } from './api/Gallery';
 
 export class ImgurApi {
     private static instance: ImgurApi;
+
+    static getInstance = (): ImgurApi => {
+        if (!ImgurApi.instance) {
+            ImgurApi.instance = new ImgurApi();
+        }
+
+        return ImgurApi.instance;
+    };
 
     getUserProfilePic = () => {
         return require('../assets/example_profile.png');
     };
 
-    fetch = async (url: string) => {
+    private fetch = async (url: string) => {
         const config = {
             headers: {
                 Authorization:
@@ -24,35 +32,20 @@ export class ImgurApi {
         sort = 'viral',
         window = 'day',
         page = 1
-    ): Promise<ApiResponseGallery[]> => {
+    ): Promise<GalleryApiModel[]> => {
         try {
-            const filter = post => ({
-                id: post.id,
-                title: post.title,
-                description: post.description,
-                link: post.link,
-                type: post.type,
-                width: post.width,
-                height: post.height,
-                images: post.images && post.images.map(image => filter(image))
-            });
             const res = await this.fetch(
                 `/gallery/${section}/${sort}/${window}/${page}`
             );
 
-            return res.data.data.map(post => filter(post));
+            return res.data.data
+                .map(post => GalleryFilter(post))
+                .filter(elem => elem)
+                .slice(0, 10);
         } catch (err) {
             console.warn(err);
             return [];
         }
-    };
-
-    static getInstance = (): ImgurApi => {
-        if (!ImgurApi.instance) {
-            ImgurApi.instance = new ImgurApi();
-        }
-
-        return ImgurApi.instance;
     };
 }
 
@@ -61,5 +54,5 @@ export class ImgurApi {
 
 //     let tmp = await mdr.getImageGallery();
 
-//     console.log(tmp[0]);
+//     console.log(tmp);
 // })();

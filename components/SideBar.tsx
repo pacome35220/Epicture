@@ -1,58 +1,62 @@
 import React from 'react';
-import { Image } from 'react-native';
-import { Text, Container, List, ListItem, Content } from 'native-base';
+import { View, Image, FlatList, StyleSheet } from 'react-native';
+import { Text, Button, Icon, ListItem } from 'native-base';
 
-const routes = ['Home', 'Gallery', 'Search', 'UserProfile'];
+const routes = ['Gallery', 'Search', 'UserProfile'];
 
 export default class SideBar extends React.Component<any> {
     render() {
         return (
-            <Container>
-                <Content>
-                    <Image
-                        source={{
-                            uri:
-                                'https://raw.githubusercontent.com/GeekyAnts/NativeBase-KitchenSink/master/assets/drawer-cover.png'
-                        }}
-                        style={{
-                            height: 120,
-                            width: '100%',
-                            alignSelf: 'stretch',
-                            position: 'absolute'
-                        }}
-                    />
-                    <Image
-                        // square
-                        style={{
-                            height: 80,
-                            width: 70,
-                            position: 'absolute',
-                            alignSelf: 'center',
-                            top: 20
-                        }}
-                        source={{
-                            uri:
-                                'https://raw.githubusercontent.com/GeekyAnts/NativeBase-KitchenSink/master/assets/logo.png'
-                        }}
-                    />
-                    <List
-                        dataArray={routes}
-                        contentContainerStyle={{ marginTop: 120 }}
-                        renderRow={data => {
-                            return (
-                                <ListItem
-                                    button
-                                    onPress={() => {
-                                        console.log('data click', data);
-                                        this.props.navigation.navigate(data);
-                                    }}>
-                                    <Text>{data}</Text>
-                                </ListItem>
-                            );
-                        }}
-                    />
-                </Content>
-            </Container>
+            <View>
+                <Image
+                    source={{
+                        uri:
+                            'https://raw.githubusercontent.com/GeekyAnts/NativeBase-KitchenSink/master/assets/drawer-cover.png'
+                    }}
+                    style={styles.headerBackground}
+                />
+                <Image
+                    style={styles.headerIcon}
+                    source={{
+                        uri:
+                            'https://raw.githubusercontent.com/GeekyAnts/NativeBase-KitchenSink/master/assets/logo.png'
+                    }}
+                />
+                <Button
+                    transparent
+                    onPress={() => this.props.navigation.toggleDrawer()}>
+                    <Icon name='menu' />
+                </Button>
+                <FlatList
+                    data={routes}
+                    contentContainerStyle={{ marginTop: 120 }}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                        <ListItem
+                            onPress={() => {
+                                this.props.navigation.navigate(item);
+                            }}>
+                            <Text>{item}</Text>
+                        </ListItem>
+                    )}
+                />
+            </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    headerBackground: {
+        height: 120,
+        width: '100%',
+        alignSelf: 'stretch',
+        position: 'absolute'
+    },
+    headerIcon: {
+        height: 80,
+        width: 70,
+        position: 'absolute',
+        alignSelf: 'center',
+        top: 20
+    }
+});

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Body, Header, Title, Left, Icon, Right } from 'native-base';
 
 interface Props {
-    callback?: any;
+    callback: any;
     tabName: string;
 }
 
@@ -20,7 +20,7 @@ export default class AppHeader extends React.Component<Props> {
                     </Button>
                 </Left>
                 <Body>
-                    <Title>Gallery</Title>
+                    <Title>{this.props.tabName}</Title>
                 </Body>
                 <Right />
             </Header>

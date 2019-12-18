@@ -32,6 +32,7 @@
         "@babel/runtime": "7.6.3",
         "@react-native-community/eslint-config": "0.0.3",
         "@types/react-native": "^0.60.21",
+        "@types/react-native-video": "^3.1.5",
         "commitizen": "^4.0.3",
         "husky": "^3.1.0",
         "lint-staged": "^9.5.0",

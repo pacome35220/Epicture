@@ -1,15 +1,65 @@
 import React from 'react';
-import { Text, Image, View, FlatList, SafeAreaView } from 'react-native';
-import { Container } from 'native-base';
+import {
+    Image,
+    FlatList,
+    SafeAreaView,
+    Dimensions,
+    StyleSheet
+} from 'react-native';
+import { Container, CardItem, Text, Card, Spinner } from 'native-base';
 
 import Video from 'react-native-video';
 
 import { ImgurApi } from '../common/ImgurApi';
-import { ApiResponseGallery } from '../common/ApiResponseInterface';
+import { GalleryApiModel, GalleryImage } from '../common/api/Gallery';
 import AppHeader from './AppHeader';
 
 interface State {
-    images: ApiResponseGallery[];
+    images: GalleryApiModel[];
+}
+
+interface GalleryPostProps {
+    post: GalleryApiModel;
+}
+
+class GalleryPost extends React.Component<GalleryPostProps> {
+    getDataTag(image: GalleryImage) {
+        if (image.type === 'video/mp4') {
+            return (
+                <Video
+                    resizeMode='contain'
+                    source={{ uri: image.link }}
+                    style={styles.galleryVideo}
+                />
+            );
+        } else {
+            return (
+                <Image
+                    source={{ uri: image.link }}
+                    style={styles.galleryImage}
+                />
+            );
+        }
+    }
+
+    render() {
+        const { post } = this.props;
+
+        console.log('Gallery currently rendering: ', post);
+        return (
+            <Card style={styles.galleryCard}>
+                <CardItem>
+                    <Text>{post.title}</Text>
+                </CardItem>
+                <CardItem cardBody>{this.getDataTag(post.images[0])}</CardItem>
+                {post.description ? (
+                    <CardItem>
+                        <Text>{post.description}</Text>
+                    </CardItem>
+                ) : null}
+            </Card>
+        );
+    }
 }
 
 class Gallery extends React.Component<any, State> {
@@ -24,63 +74,52 @@ class Gallery extends React.Component<any, State> {
         try {
             const images = await ImgurApi.getInstance().getImageGallery();
 
-            this.setState(prevState => ({
-                images: [...prevState.images, ...images]
-            }));
+            this.setState({ images });
         } catch (err) {
             console.warn(err);
         }
     }
 
     render() {
-        if (!this.state.images.length) {
-            return <Text>Loading</Text>;
-        }
         return (
             <Container>
                 <AppHeader
-                    tabName='gallery'
+                    tabName='Gallery'
                     callback={this.props.navigation.toggleDrawer}
                 />
-                <SafeAreaView>
-                    <FlatList
-                        data={this.state.images}
-                        renderItem={({ item }) => {
-                            console.log('Gallery currently rendering: ', item);
-
-                            // return <Text> {item.link} </Text>;
-
-                            if (item.images[0].type === 'video/mp4') {
-                                return (
-                                    <Video
-                                        source={{
-                                            uri: item.images[0].link
-                                        }}
-                                    />
-                                );
-                            } else {
-                                console.log(item.images[0].link);
-                                // return <Text> {item.images[0].link} </Text>;
-                                return (
-                                    <View>
-                                        <Image
-                                            style={{
-                                                width: item.images[0].width,
-                                                height: item.images[0].height
-                                            }}
-                                            source={{
-                                                uri: item.images[0].link
-                                            }}
-                                        />
-                                    </View>
-                                );
-                            }
-                        }}
-                    />
-                </SafeAreaView>
+                {!this.state.images.length ? (
+                    <Spinner />
+                ) : (
+                    <SafeAreaView>
+                        <FlatList
+                            data={this.state.images}
+                            keyExtractor={(item, index) => index.toFixed()}
+                            renderItem={({ item }) => (
+                                <GalleryPost post={item} />
+                            )}
+                        />
+                    </SafeAreaView>
+                )}
             </Container>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    galleryCard: {
+        marginBottom: 20,
+        marginLeft: 20,
+        marginRight: 20
+    },
+    galleryImage: {
+        width: Dimensions.get('window').width - 20 - 20,
+        height: Dimensions.get('window').height,
+        resizeMode: 'contain'
+    },
+    galleryVideo: {
+        width: Dimensions.get('window').width - 20 - 20,
+        height: Dimensions.get('window').height
+    }
+});
 
 export default Gallery;
