@@ -28,7 +28,7 @@ class UserProfile extends React.Component<Props, State> {
 
     async componentDidMount() {
         try {
-            const images = await ImgurApi.getInstance().getAccountImages();
+            const images = await ImgurApi.getAccountImages();
 
             this.setState({ images });
         } catch (err) {

@@ -28,7 +28,7 @@ class Gallery extends React.Component<Props, State> {
 
     async componentDidMount() {
         try {
-            const images = await ImgurApi.getInstance().getImageGallery();
+            const images = await ImgurApi.getImageGallery();
 
             this.setState({ images });
         } catch (err) {

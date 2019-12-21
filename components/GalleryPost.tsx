@@ -33,8 +33,6 @@ export class GalleryPost extends React.Component<Props> {
     render() {
         const { post } = this.props;
 
-        console.log('Gallery currently rendering: ', post);
-
         return (
             <Card style={styles.galleryCard}>
                 <CardItem>

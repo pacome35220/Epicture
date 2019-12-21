@@ -1,9 +1,20 @@
 import React from 'react';
-import { View, TextInput } from 'react-native';
+import { FlatList, SafeAreaView } from 'react-native';
+import {
+    Container,
+    Header,
+    Item,
+    Icon,
+    Input,
+    Button,
+    Text
+} from 'native-base';
 
-import User, { OAuth2Response } from '../common/User';
+import { GalleryApiModel } from '../common/api/Gallery';
+import { ImgurApi } from '../common/ImgurApi';
 
 import AppHeader from './AppHeader';
+import { GalleryPost } from './GalleryPost';
 
 interface Props {
     navigation: {
@@ -12,44 +23,73 @@ interface Props {
 }
 
 interface State {
-    user: OAuth2Response;
+    images: GalleryApiModel[];
 }
 
 class Search extends React.Component<Props, State> {
-    searchText: string = '';
+    text: string;
 
     constructor(props) {
         super(props);
         this.state = {
-            user: {} as OAuth2Response
+            images: []
         };
     }
 
     async componentDidMount() {
-        this.setState({ user: await User.get() });
+        try {
+        } catch (err) {
+            console.warn(err);
+        }
     }
 
-    private onSearchInputChange(text) {
-        this.searchText = text;
-    }
+    searchImage = async () => {
+        try {
+            const images = await ImgurApi.searchImage(this.text);
 
-    private searchImage() {
-        // console.log(this.searchText);
-    }
+            this.setState({ images });
+        } catch (err) {
+            console.warn(err);
+        }
+    };
 
     render() {
         return (
-            <View style={{ marginTop: 50 }}>
+            <Container>
                 <AppHeader
-                    tabName='Gallery'
+                    tabName='Search'
                     callback={() => this.props.navigation.toggleDrawer()}
                 />
-                <TextInput
-                    placeholder='Search an image'
-                    onChangeText={text => this.onSearchInputChange(text)}
-                    onSubmitEditing={() => this.searchImage()}
-                />
-            </View>
+
+                <Header searchBar rounded>
+                    <Item>
+                        <Icon name='ios-search' />
+                        <Input
+                            placeholder='Search'
+                            ref='searchBar'
+                            onChangeText={text => (this.text = text)}
+                            onSubmitEditing={() => this.searchImage()}
+                        />
+                        <Button rounded onPress={() => this.searchImage()}>
+                            <Icon name='ios-search' />
+                        </Button>
+                    </Item>
+                </Header>
+
+                {this.state.images.length ? (
+                    <SafeAreaView>
+                        <FlatList
+                            data={this.state.images}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) => (
+                                <GalleryPost post={item.images[0]} />
+                            )}
+                        />
+                    </SafeAreaView>
+                ) : (
+                    <Text>No image corresponds to the search</Text>
+                )}
+            </Container>
         );
     }
 }
