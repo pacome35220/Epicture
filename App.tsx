@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import OAuth2Imgur from './components/OAuth2Imgur';
-import HomeScreenRouter from './components/HomeScreen/HomeScreenRouter';
+import HomeScreenRouter from './components/HomeScreenRouter';
 
 import { User, OAuth2Response } from './common/User';
 

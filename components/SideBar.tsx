@@ -1,25 +1,40 @@
 import React from 'react';
-import { View, Image, FlatList, StyleSheet } from 'react-native';
-import { Text, Button, Icon, ListItem } from 'native-base';
+import { Text, Image, FlatList, StyleSheet, View } from 'react-native';
+import { Button, Icon, ListItem, Container, Header } from 'native-base';
 
-const routes = ['Gallery', 'Search', 'UserProfile'];
+import { User, OAuth2Response } from '../common/User';
 
-export default class SideBar extends React.Component<any> {
-    render() {
+interface State {
+    user: OAuth2Response;
+}
+
+const routes = ['Gallery', 'Search', 'Profile'];
+
+export default class SideBar extends React.Component<any, State> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: {}
+        };
+    }
+
+    async componentDidMount() {
+        this.setState({ user: await User.get() });
+    }
+
+    getSideBarHeader() {
         return (
-            <View>
+            <>
                 <Image
                     source={{
-                        uri:
-                            'https://raw.githubusercontent.com/GeekyAnts/NativeBase-KitchenSink/master/assets/drawer-cover.png'
+                        uri: `https://imgur.com/user/${this.state.user.account_username}/cover`
                     }}
                     style={styles.headerBackground}
                 />
                 <Image
                     style={styles.headerIcon}
                     source={{
-                        uri:
-                            'https://raw.githubusercontent.com/GeekyAnts/NativeBase-KitchenSink/master/assets/logo.png'
+                        uri: `https://imgur.com/user/${this.state.user.account_username}/avatar`
                     }}
                 />
                 <Button
@@ -27,6 +42,17 @@ export default class SideBar extends React.Component<any> {
                     onPress={() => this.props.navigation.toggleDrawer()}>
                     <Icon name='menu' />
                 </Button>
+                <Text style={styles.username}>
+                    {this.state.user.account_username}
+                </Text>
+            </>
+        );
+    }
+
+    render() {
+        return (
+            <View>
+                {this.getSideBarHeader()}
                 <FlatList
                     data={routes}
                     contentContainerStyle={{ marginTop: 120 }}
@@ -57,6 +83,12 @@ const styles = StyleSheet.create({
         width: 70,
         position: 'absolute',
         alignSelf: 'center',
-        top: 20
+        borderRadius: 100,
+        top: 25
+    },
+    username: {
+        color: 'white',
+        alignSelf: 'center',
+        position: 'absolute'
     }
 });

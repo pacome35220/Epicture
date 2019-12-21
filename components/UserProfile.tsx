@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, View, Image, ImageBackground, Dimensions } from 'react-native';
 
-import { UserNavbar } from './HomeScreen/HomeScreen';
+import AppHeader from './AppHeader';
 import User from '../common/User';
+import { Container } from 'native-base';
 
-class UserProfile extends React.Component {
+class UserProfile extends React.Component<any, any> {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,37 +19,12 @@ class UserProfile extends React.Component {
 
     render() {
         return (
-            <View style={{ flex: 1 }}>
-                <View
-                    style={{
-                        flex: 2,
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}>
-                    <ImageBackground
-                        style={{ width: Dimensions.get('window').width }}
-                        source={{
-                            uri: `https://imgur.com/user/${this.state.user.account_username}/cover`
-                        }}>
-                        <Image
-                            style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: 100
-                            }}
-                            source={{
-                                uri: `https://imgur.com/user/${this.state.user.account_username}/avatar`
-                            }}
-                        />
-                        <Text style={{ marginTop: 20 }}>
-                            {this.state.user.account_username}
-                        </Text>
-                    </ImageBackground>
-                </View>
-                <View style={{ flex: 4 }}>
-                    <UserNavbar />
-                </View>
-            </View>
+            <Container>
+                <AppHeader
+                    tabName='Profile'
+                    callback={this.props.navigation.toggleDrawer}
+                />
+            </Container>
         );
     }
 }
