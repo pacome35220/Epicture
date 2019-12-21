@@ -17,7 +17,6 @@ const HomeScreenRouter = createAppContainer(
             UserProfile: { screen: UserProfile }
         },
         {
-            drawerType: 'slide',
             contentComponent: props => <SideBar {...props} />
         }
     )
