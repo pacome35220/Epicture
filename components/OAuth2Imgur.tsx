@@ -9,15 +9,15 @@ interface Props {
 
 interface State {
     user: OAuth2Response;
-    logged: boolean;
 }
+
+const baseAuthURL = 'https://api.imgur.com/oauth2/authorize';
 
 class OAuth2Imgur extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
-            user: {},
-            logged: false
+            user: {} as OAuth2Response
         };
     }
 
@@ -25,50 +25,51 @@ class OAuth2Imgur extends React.Component<Props, State> {
         this.setState({ user: await User.get() });
     }
 
-    getAuthUrl(clientId: string) {
-        return (
-            `https://api.imgur.com/oauth2/authorize?response_type=token` +
-            `&client_id=${clientId}`
-        );
+    getAuthURL(clientId: string) {
+        return `${baseAuthURL}?response_type=token&client_id=${clientId}`;
+    }
+
+    parseAuthResponse(m: string[]): OAuth2Response {
+        const regex = /(\?|\&|#)([^=]+)\=([^&]+)/;
+
+        return {
+            access_token: m[0].match(regex)[3],
+            expires_in: m[1].match(regex)[3],
+            token_type: m[2].match(regex)[3],
+            refresh_token: m[3].match(regex)[3],
+            account_username: m[4].match(regex)[3],
+            account_id: m[5].match(regex)[3]
+        };
     }
 
     parseResponseURL(url: string) {
-        let user = this.state.user;
+        if (
+            (!this.state.user ||
+                Object.entries(this.state.user).length !== 6) &&
+            url.split('&').length === 6
+        ) {
+            let user: OAuth2Response = this.parseAuthResponse(
+                url.match(/(\?|\&|#)([^=]+)\=([^&]+)/g)
+            );
 
-        if (!user || !Object.entries(user).length) {
-            if (url.split('&').length != 6) return null;
-            const array = url.match(/(\?|\&|#)([^=]+)\=([^&]+)/g);
-            let res: OAuth2Response = {};
-
-            array.forEach((elem: string) => {
-                const tmp = elem.match(/(\?|\&|#)([^=]+)\=([^&]+)/);
-
-                res[tmp[2]] = tmp[3];
-            });
-            User.set(res);
+            User.set(user);
+            this.props.onLogged(user);
         }
-        this.setState({
-            logged: true
-        });
-        this.props.onLogged(user);
     }
 
     render() {
-        if (!this.state.logged)
-            return (
-                <WebView
-                    source={{
-                        uri: this.getAuthUrl(
-                            require('../credentials.json').clientId
-                        )
-                    }}
-                    onNavigationStateChange={(newNavState: WebViewNavigation) =>
-                        this.parseResponseURL(newNavState.url)
-                    }
-                    style={{ marginTop: 20 }}
-                />
-            );
-        else return null;
+        return (
+            <WebView
+                source={{
+                    uri: this.getAuthURL(
+                        require('../credentials.json').clientId
+                    )
+                }}
+                onNavigationStateChange={(newNavState: WebViewNavigation) =>
+                    this.parseResponseURL(newNavState.url)
+                }
+            />
+        );
     }
 }
 

@@ -1,12 +1,12 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
 export interface OAuth2Response {
-    access_token?: string;
-    expires_in?: string;
-    token_type?: string;
-    refresh_token?: string;
-    account_username?: string;
-    account_id?: string;
+    access_token: string;
+    expires_in: string;
+    token_type: string;
+    refresh_token: string;
+    account_username: string;
+    account_id: string;
 }
 
 export class User {

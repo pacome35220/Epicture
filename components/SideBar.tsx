@@ -1,8 +1,15 @@
 import React from 'react';
 import { Text, Image, FlatList, StyleSheet, View } from 'react-native';
-import { Button, Icon, ListItem, Container, Header } from 'native-base';
+import { Button, Icon, ListItem, Spinner } from 'native-base';
 
 import { User, OAuth2Response } from '../common/User';
+
+interface Props {
+    navigation: {
+        toggleDrawer(): void;
+        navigate(route: string): void;
+    };
+}
 
 interface State {
     user: OAuth2Response;
@@ -10,11 +17,11 @@ interface State {
 
 const routes = ['Gallery', 'Search', 'Profile'];
 
-export default class SideBar extends React.Component<any, State> {
+export default class SideBar extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
-            user: {}
+            user: {} as OAuth2Response
         };
     }
 

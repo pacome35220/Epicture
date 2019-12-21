@@ -22,9 +22,9 @@ class Gallery extends React.Component<any, State> {
 
     async componentDidMount() {
         try {
-            // const images = await ImgurApi.getInstance().getImageGallery();
+            const images = await ImgurApi.getInstance().getImageGallery();
 
-            // this.setState({ images });
+            this.setState({ images });
         } catch (err) {
             console.warn(err);
         }
@@ -43,7 +43,7 @@ class Gallery extends React.Component<any, State> {
                     <SafeAreaView>
                         <FlatList
                             data={this.state.images}
-                            keyExtractor={(item, index) => index.toFixed()}
+                            keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item }) => (
                                 <GalleryPost post={item} />
                             )}
