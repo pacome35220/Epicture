@@ -4,13 +4,13 @@ import { CardItem, Text, Card } from 'native-base';
 
 import Video from 'react-native-video';
 
-import { GalleryImage, GalleryApiModel } from '../common/api/Gallery';
+import { GalleryImage } from '../common/api/Gallery';
 
-interface GalleryPostProps {
-    post: GalleryApiModel;
+interface Props {
+    post: GalleryImage;
 }
 
-export class GalleryPost extends React.Component<GalleryPostProps> {
+export class GalleryPost extends React.Component<Props> {
     getDataTag(image: GalleryImage) {
         if (image.type === 'video/mp4') {
             return (
@@ -40,7 +40,7 @@ export class GalleryPost extends React.Component<GalleryPostProps> {
                 <CardItem>
                     <Text>{post.title}</Text>
                 </CardItem>
-                <CardItem cardBody>{this.getDataTag(post.images[0])}</CardItem>
+                <CardItem cardBody>{this.getDataTag(post)}</CardItem>
                 {post.description ? (
                     <CardItem>
                         <Text>{post.description}</Text>

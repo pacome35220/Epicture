@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { GalleryApiModel, GalleryFilter } from './api/Gallery';
+import { GalleryApiModel, galleryFilter, GalleryImage } from './api/Gallery';
+import { accountImagesFilter } from './api/AccountImages';
+
+import User from './User';
 
 export class ImgurApi {
     private static instance: ImgurApi;
@@ -12,15 +15,11 @@ export class ImgurApi {
         return ImgurApi.instance;
     };
 
-    getUserProfilePic = () => {
-        return require('../assets/example_profile.png');
-    };
-
     private fetch = async (url: string) => {
+        const user = await User.get();
         const config = {
             headers: {
-                Authorization:
-                    'Client-ID ' + require('../credentials.json').clientId
+                Authorization: `Bearer ${user.access_token}`
             }
         };
 
@@ -39,8 +38,21 @@ export class ImgurApi {
             );
 
             return res.data.data
-                .map(post => GalleryFilter(post))
+                .map(post => galleryFilter(post))
                 .filter(elem => elem)
+                .slice(0, 10);
+        } catch (err) {
+            console.warn(err);
+            return [];
+        }
+    };
+
+    getAccountImages = async (): Promise<GalleryImage[]> => {
+        try {
+            const res = await this.fetch(`/account/me/images`);
+
+            return res.data.data
+                .map(image => accountImagesFilter(image))
                 .slice(0, 10);
         } catch (err) {
             console.warn(err);

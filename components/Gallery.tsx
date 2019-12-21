@@ -8,11 +8,17 @@ import { GalleryApiModel } from '../common/api/Gallery';
 import AppHeader from './AppHeader';
 import { GalleryPost } from './GalleryPost';
 
+interface Props {
+    navigation: {
+        toggleDrawer(): void;
+    };
+}
+
 interface State {
     images: GalleryApiModel[];
 }
 
-class Gallery extends React.Component<any, State> {
+class Gallery extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,7 +41,7 @@ class Gallery extends React.Component<any, State> {
             <Container>
                 <AppHeader
                     tabName='Gallery'
-                    callback={this.props.navigation.toggleDrawer}
+                    callback={() => this.props.navigation.toggleDrawer()}
                 />
                 {!this.state.images.length ? (
                     <Spinner />
@@ -45,7 +51,7 @@ class Gallery extends React.Component<any, State> {
                             data={this.state.images}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item }) => (
-                                <GalleryPost post={item} />
+                                <GalleryPost post={item.images[0]} />
                             )}
                         />
                     </SafeAreaView>

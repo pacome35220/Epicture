@@ -22,7 +22,7 @@ interface GalleryApiModel {
     images: GalleryImage[];
 }
 
-const GalleryFilter = (post): GalleryApiModel => {
+const galleryFilter = (post): GalleryApiModel => {
     if (!post.images) {
         return null;
     }
@@ -43,4 +43,4 @@ const GalleryFilter = (post): GalleryApiModel => {
     };
 };
 
-export { GalleryImage, GalleryApiModel, GalleryFilter };
+export { GalleryImage, GalleryApiModel, galleryFilter };

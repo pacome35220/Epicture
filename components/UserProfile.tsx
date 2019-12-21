@@ -1,20 +1,39 @@
 import React from 'react';
+import { FlatList, SafeAreaView } from 'react-native';
+import { Container, Spinner } from 'native-base';
+
+import { GalleryImage } from '../common/api/Gallery';
+import { ImgurApi } from '../common/ImgurApi';
 
 import AppHeader from './AppHeader';
-import User from '../common/User';
-import { Container } from 'native-base';
+import { GalleryPost } from './GalleryPost';
 
-class UserProfile extends React.Component<any, any> {
+interface Props {
+    navigation: {
+        toggleDrawer(): void;
+    };
+}
+
+interface State {
+    images: GalleryImage[];
+}
+
+class UserProfile extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
-            user: {},
-            ImageBackground: {}
+            images: []
         };
     }
 
     async componentDidMount() {
-        this.setState({ user: await User.get() });
+        try {
+            const images = await ImgurApi.getInstance().getAccountImages();
+
+            this.setState({ images });
+        } catch (err) {
+            console.warn(err);
+        }
     }
 
     render() {
@@ -22,8 +41,21 @@ class UserProfile extends React.Component<any, any> {
             <Container>
                 <AppHeader
                     tabName='Profile'
-                    callback={this.props.navigation.toggleDrawer}
+                    callback={() => this.props.navigation.toggleDrawer()}
                 />
+                {!this.state.images.length ? (
+                    <Spinner />
+                ) : (
+                    <SafeAreaView>
+                        <FlatList
+                            data={this.state.images}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) => (
+                                <GalleryPost post={item} />
+                            )}
+                        />
+                    </SafeAreaView>
+                )}
             </Container>
         );
     }
